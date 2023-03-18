@@ -33,4 +33,4 @@
 ### Author
 > Created by **Mahmoud Taha**
 > 
-<sub>for more information please email me at *mahmoudtaha319@gmail.com*</sub>
+<sub>for more information contact me.</sub>
