@@ -118,5 +118,4 @@ if __name__ == "__main__":
                            Position(amazon, 435),
                            Position(shop_nyse, 708),
                            Position(tesla, 1530)])
-    # print(portfolio.get_total_value())
     display_portfolio_summary(portfolio)
