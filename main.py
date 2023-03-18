@@ -35,7 +35,7 @@ class Portfolio:
 
         for position in self.positions:
             total_value += position.quantity * position.stock.usd_price
-        return round(total_value, 2)
+        return total_value
 
 
 def create_request(url):
@@ -72,6 +72,32 @@ def price_info(ticker, exchange):
     return {"ticker": ticker, "exchange": exchange, "price": price, "currency": currency, "usd_price": usd_price}
 
 
+def display_portfolio_summary(pfo):
+    if not isinstance(pfo, Portfolio):
+        raise TypeError("Please provide an instance of Portfolio Type")
+
+    portfolio_value = portfolio.get_total_value()
+
+    position_data = []
+
+    for position in sorted(pfo.positions, key=lambda x: x.quantity * x.stock.usd_price, reverse=True):
+        position_data.append([
+            position.stock.ticker,
+            position.stock.exchange,
+            position.quantity,
+            position.stock.usd_price,
+            position.quantity * position.stock.usd_price,
+            position.quantity * position.stock.usd_price / portfolio_value * 100
+        ])
+
+    print(tabulate(position_data,
+                   headers=["Ticker", "Exchange", "Quantity", "Price", "Market Value", "% Allocation"],
+                   tablefmt="psql",
+                   floatfmt=".2f"))
+
+    print(f"Total portfolio value: ${portfolio_value:,.2f}")
+
+
 if __name__ == "__main__":
     # print(price_info("GOOGL", "NASDAQ"))
     # print(price_info("AMZN", "NASDAQ"))
@@ -84,9 +110,13 @@ if __name__ == "__main__":
     google = Stock("GOOGL", "NASDAQ")
     amazon = Stock("AMZN", "NASDAQ")
     shop_nyse = Stock("SHOP", "NYSE")
+    bns = Stock("BNS", "TSE")
+    tesla = Stock("TSLA", "NASDAQ")
 
-    portfolio = Portfolio([Position(google, 5),
-                           Position(shop, 5),
-                           Position(amazon, 5),
-                           Position(shop_nyse, 5)])
-    print(portfolio.get_total_value())
+    portfolio = Portfolio([Position(google, 56),
+                           Position(shop, 312),
+                           Position(amazon, 435),
+                           Position(shop_nyse, 708),
+                           Position(tesla, 1530)])
+    # print(portfolio.get_total_value())
+    display_portfolio_summary(portfolio)
